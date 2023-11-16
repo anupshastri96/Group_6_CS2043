@@ -11,6 +11,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import javafx.scene.control.DatePicker;
 
@@ -26,9 +30,12 @@ public class WelcomePage extends Application {
     TextField guestEmailIn;
     TextField guestAddressIn;
     DatePicker checkInField;
-    DatePicker checkOutField;
+    public DbLoader dbLoader = DbLoader.loadFromCredentialsFile("credentials.txt");
+    //I will share credentials.txt seperately please email me at jonathanrobichaud@icloud.com 
+    private DatePicker checkOutField;
 
     public void start (Stage primaryStage) {
+    
         this.primaryStage = primaryStage;
         this.pane = new VBox(10.0);
         this.pane.setAlignment(Pos.CENTER);
@@ -147,13 +154,20 @@ public class WelcomePage extends Application {
         Button modifyStayButton = new Button("Modify Stay");
         Button exitButton = new Button("Exit");
         
-        guestRegistration.setOnAction(this::processGuestRegistration);
+        guestRegistration.setOnAction(arg0 -> {
+            try {
+                processGuestRegistration(arg0);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
         modifyStayButton.setOnAction(this::processModifyStay);
         exitButton.setOnAction(this::processExit);
 
         pane.getChildren().addAll(guestRegistration, modifyStayButton, exitButton);
     }
-    public void processGuestRegistration(ActionEvent event) {
+    public void processGuestRegistration(ActionEvent event) throws SQLException { 
         pane.getChildren().clear();
         
         Text guestName = new Text ("Name: ");
@@ -170,6 +184,10 @@ public class WelcomePage extends Application {
         guestAddressIn = new TextField();
         checkInField = new DatePicker();
         checkOutField = new DatePicker();
+        
+        
+        
+        
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -183,7 +201,14 @@ public class WelcomePage extends Application {
         Button clearButton = new Button("Clear");
         Button exitButton = new Button("Exit");
         
-        enterButton.setOnAction(this::processEnter);
+        enterButton.setOnAction(arg0 -> {
+            try {
+                processEnter(arg0);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
         clearButton.setOnAction(this::processClear);
         exitButton.setOnAction(this::processExitStaff);
 
@@ -208,7 +233,10 @@ public class WelcomePage extends Application {
         primaryStage.setWidth(500); 
         primaryStage.setHeight(500);
     }
-    public void processEnter(ActionEvent event){
+    public void processEnter(ActionEvent event) throws SQLException{
+        Connection connection = DriverManager.getConnection(dbLoader.getUrl(), dbLoader.getUsername(), dbLoader.getPassword());
+        GuestRegistration guest = new GuestRegistration(connection, guestNameIn, guestPhoneNumberIn, guestEmailIn, guestAddressIn, DateOfBirthIn);
+        guest.addToDb();
         System.out.println("Incomplete Enter process");
     }
     public void processClear(ActionEvent event){
