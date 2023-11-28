@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="hotel.UI.Staff.AdditionalServices.AdditionalServicesOptions.gymController"
+      spacing="10" alignment="CENTER">
+
+    <children>
+        <Text text="Do you want access to the gym?"/>
+        <Button text="YES" onAction="#processGymConfirmation"/>
+        <Button text="NO" onAction="#processExit"/>
+    </children>
+    <padding>
+        <Insets top="10" right="20" bottom="20" left="20"/>
+    </padding>
+</VBox>

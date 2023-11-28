@@ -1,1 +1,8 @@
-hoteldb/.vscode/
+.vscode/
+credentials.txt
+target/classes/*
+target/test-classes/*
+target/maven-status/*
+lib
+oldGui
+hotelmanagement

@@ -1,13 +1,14 @@
+package hotel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class DbLoader {
-    private String url;
-    private String username;
-    private String password;
+    private static String url;
+    private static String username;
+    private static String password;
 
-    public DbLoader(String url, String username, String password)   {
+    private DbLoader(String url, String username, String password)   {
         this.url = url;
         this.username = username;
         this.password = password;
@@ -23,7 +24,7 @@ public class DbLoader {
             String url = null;
 
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split("=");
+                String[] parts = line.split("=",2);
                 if (parts.length == 2) {
                     String key = parts[0].trim();
                     String value = parts[1].trim();
@@ -46,14 +47,14 @@ public class DbLoader {
         }
     }
 
-    public String getUrl() {
+    public static String getUrl() {
         return url;
     }
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
 
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
 

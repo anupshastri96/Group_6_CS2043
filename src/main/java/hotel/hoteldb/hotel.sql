@@ -1,6 +1,8 @@
+drop table if exists stay, reservation, invoice, guest, room, room_type, hotel;
+
 --work in progress!
 create table room_type 
-( room_type    int unsigned not null primary key,
+( room_type    int not null primary key,
   room_type_name     varchar(30) not null,
   --king_bed_quantity  int unsigned not null,
  -- queen_bed_quantity int unsigned not null,
@@ -17,8 +19,8 @@ create table room_type
 --
 create table room
 ( --hotel_id          int unsigned not null,
-  room_number       int unsigned not null,
-  room_type         int unsigned,
+  room_number       int not null,
+  room_type         int,
   room_status_flag  tinyint default 0,
   primary key (room_number),
   --primary key (hotel_id, room_number),
@@ -28,15 +30,16 @@ create table room
 );
 
 create table guest
-( guest_id       int unsigned not null primary key,
+( guest_id       int not null primary key,
   name     varchar(40) not null,
   address    varchar(50),
   email    varchar(40),
-  phone    varchar(20)
+  phone    varchar(20),
+  date_of_birth    date
 );
 
 create table invoice
-( invoice_id       int unsigned not null primary key,
+( invoice_id       int not null primary key,
   discount_code     varchar(40),
   --how to implement ammenities?
   --maybe a table of items person charged to their room?
@@ -44,10 +47,10 @@ create table invoice
 );
 
 create table reservation
-( reservation_id  int unsigned not null primary key,
-  guest_id       int unsigned not null,
+( reservation_id  int not null primary key,
+  guest_id       int not null,
   --hotel_id        int unsigned not null ,
-  room_type  int unsigned not null,
+  room_type  int not null,
   check_in_date   date not null, 
   check_out_date  date not null, 
   cancelled_flag  tinyint default 0,
@@ -66,17 +69,18 @@ create table reservation
 -- early or extended for extra nights.
 ------------------------------------------------------------
 create table stay
-( stay_id                  int unsigned not null primary key,
-  guest_id                 int unsigned not null,
+( stay_id                  int not null primary key,
+  guest_id                 int not null,
 --  hotel_id                 int unsigned not null ,
-  room_number              int unsigned not null,
-  actual_checkin_date      date default null, 
-  expected_checkout_date   date not null, 
-  actual_checkout_date     date default null, 
+  room_number              int  not null,
+  checkin_date    date not null,
+ -- actual_checkin_date      date default null, 
+ -- expected_checkout_date   date not null, 
+  checkout_date     date default null, 
   ext_checkout_date        date default null,
   early_checkout_date      date default null,
   --charged_rate             decimal(7,2) not null,
-  invoice_id      int unsigned not null,
+  invoice_id      int not null,
   foreign key (invoice_id) references invoice (invoice_id),
   foreign key (guest_id)   references guest (guest_id),
    foreign key (room_number) 

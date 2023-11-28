@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="hotel.UI.Staff.AdditionalServices.AdditionalServicesController"
+      spacing="10" alignment="CENTER">
+
+    <children>
+        <Text fx:id="additionalServicesInfoText" text=""/>
+        <Button text="Gym" onAction="#processGym"/>
+        <Button text="Pool" onAction="#processPool"/>
+        <Button text="Night Bar" onAction="#processBar"/>
+        <Button text="Breakfast Buffet" onAction="#processBuffet"/>
+        <Button text="Exit" onAction="#processExit"/>
+    </children>
+    <padding>
+        <Insets top="10" right="20" bottom="20" left="20"/>
+    </padding>
+</VBox>
+    

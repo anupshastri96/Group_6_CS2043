@@ -1,0 +1,30 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
+
+
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="hotel.UI.Staff.GuestManagement.listGuestsController" spacing="5" alignment="CENTER">
+    <padding>
+        <Insets top="10" right="20" bottom="20" left="20"/>
+    </padding>
+    <children>
+        <TableView fx:id="tableView">
+            <columns>
+                <TableColumn text="Guest ID" fx:id="guestIdColumn"/>
+                <TableColumn text="Name" fx:id="nameColumn"/>
+                <TableColumn text="Phone" fx:id="phoneColumn"/>
+                <TableColumn text="Email" fx:id="emailColumn"/>
+                <TableColumn text="Address" fx:id="addressColumn"/>
+                <TableColumn text="Date of Birth" fx:id="DOBColumn"/>
+                <!-- Add other columns here -->
+            </columns>
+        </TableView>
+
+        <Button text="Exit" onAction="#processExitStaff"/>
+    </children>
+</VBox>

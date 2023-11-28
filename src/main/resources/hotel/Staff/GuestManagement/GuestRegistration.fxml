@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.*?>
+
+<GridPane alignment="CENTER" hgap="50" vgap="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotel.UI.Staff.GuestManagement.GuestRegistrationController">
+            <children>
+                
+                <Text text="Name:* " GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Text text="DOB:* " GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Text text="Phone Number:* " GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Text text="Email:* " GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <Text text="Address:* " GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <Text text="Check In Date:* " GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                <Text text="Check Out Date:* " GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                 <Text text="Room Type:* " GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                <TextField fx:id="guestNameIn" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <DatePicker fx:id="dateOfBirthIn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="guestPhoneNumberIn" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="guestEmailIn" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="guestAddressIn" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <DatePicker fx:id="checkInField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <DatePicker fx:id="checkOutField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <ComboBox fx:id="roomType" layoutX="50.0" layoutY="50.0" GridPane.columnIndex="1" GridPane.rowIndex="7" onAction="#handleSelection">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="One King Bed"/>
+                            <String fx:value="Two Queen Beds"/>
+                            <String fx:value="One King Bed with Sofabed"/>
+                            <String fx:value="Junior Suite With One King Bed"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <HBox spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2">
+                    <children>
+                        <Button text="Enter" onAction="#processEnter" />
+                        <Button text="Clear" onAction="#processClear" />
+                        <Button text="Exit" onAction="#processExitStaff" />
+                        <Text text="" fx:id="requiredText"/>
+                    </children>
+                </HBox>
+            </children>
+        </GridPane>
