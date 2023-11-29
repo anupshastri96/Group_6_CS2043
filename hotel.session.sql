@@ -1,0 +1,1 @@
+SELECT room_status_flag FROM room where room_number = 101;

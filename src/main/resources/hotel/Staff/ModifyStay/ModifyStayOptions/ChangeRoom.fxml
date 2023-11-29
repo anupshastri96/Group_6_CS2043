@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.*?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="hotel.UI.Staff.ModifyStay.ModifyStayOptions.changeRoomController"
+      spacing="10" alignment="CENTER">
+
+    <children>
+        <Text text="Please enter desired room number below:"/>
+        <TextField fx:id="roomNumber" promptText="Room Number"/>
+        <Button text="Enter" onAction="#processChangeRoom"/>
+    </children>
+    <padding>
+        <Insets top="10" right="20" bottom="20" left="20"/>
+    </padding>
+</VBox>
