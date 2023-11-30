@@ -71,7 +71,7 @@ public class listGuestsController implements Initializable {
             tableView.getItems().addAll(guests);
         } catch (SQLException e) {
             e.printStackTrace();
-            WelcomePage.setRoot("Error");
+            //WelcomePage.setRoot("Error");
         }
     }
 

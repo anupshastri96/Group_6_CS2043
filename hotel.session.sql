@@ -1,1 +1,1 @@
-select * from stay;
+SELECT guest.name AS guest_name, stay.stay_id, stay.room_number, stay.checkin_date, stay.checkout_date, invoice.invoice_id, invoice.invoice_total FROM stay JOIN guest ON stay.guest_id = guest.guest_id JOIN invoice ON stay.invoice_id = invoice.invoice_id WHERE guest.name = "John Smith";

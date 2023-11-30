@@ -35,7 +35,6 @@ public class checkOutController implements Initializable{
 
     public void processCheckout() throws IOException{
         try (Connection connection = DriverManager.getConnection(DbLoader.getUrl(), DbLoader.getUsername(), DbLoader.getPassword())) {
-
                 processCheckOutDB(connection);
         } 
         catch (SQLException e) {
@@ -46,7 +45,6 @@ public class checkOutController implements Initializable{
 
 
     public void processCheckOutDB(Connection connection) throws IOException, SQLException {
-        
 
         //Free Room
         String oldRoomUpdate = "UPDATE room\r\n" + //
@@ -55,6 +53,7 @@ public class checkOutController implements Initializable{
         PreparedStatement updateOldRoom = connection.prepareStatement(oldRoomUpdate);
         updateOldRoom.setString(1, name);
         updateOldRoom.execute();
+        
 
         //Calculate Cost
         String sqlQuery = "SELECT guest.name AS guest_name, stay.room_number, " +
@@ -81,9 +80,21 @@ public class checkOutController implements Initializable{
             catch (SQLException e) {
             e.printStackTrace();
             }
+
+            updateInvoice(connection);
          checkOutText.setText("Guest " + name + " Checked Out! Total Cost: " + totalCost + "$. Number of Nights: " + numNights);
          checkOutButton.setVisible(false);
          cancelButton.setText("Exit");
+        }
+
+        public void updateInvoice(Connection connection) throws SQLException{
+            String updateInvoice = "UPDATE invoice\r\n" + //
+                "SET invoice_total = invoice_total + ?\r\n" + //
+                "WHERE invoice_id IN (SELECT stay.invoice_id FROM stay JOIN guest ON stay.guest_id = guest.guest_id WHERE guest.name = ?);";
+            PreparedStatement updateInvoiceStatement = connection.prepareStatement(updateInvoice);
+            updateInvoiceStatement.setDouble(1, totalCost);
+            updateInvoiceStatement.setString(2, name);
+            updateInvoiceStatement.execute();
         }
 
 
