@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Random;
+import javafx.beans.property.*;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,12 +36,10 @@ public class GuestRegistration {
     private LocalDate checkOutDate;
 
     private StringProperty guestDOB;
-
-
-    //private StringProperty roomType;
-    private int roomType;
+    private IntegerProperty roomType;
     private int invoiceID;
-    private int roomNumber;
+    private IntegerProperty roomNumber;
+    private int successfulRoomNumber;
     
     //private int age;
 
@@ -51,6 +50,8 @@ public class GuestRegistration {
         this.guestEmail = new SimpleStringProperty("");
         this.address = new SimpleStringProperty("");
         this.guestDOB = new SimpleStringProperty("");
+        this.roomType = new SimpleIntegerProperty(0);
+        this.roomNumber = new SimpleIntegerProperty(0);
     }
 
      public GuestRegistration(TextField guestNameIn, TextField guestPhoneNumberIn,
@@ -64,15 +65,64 @@ public class GuestRegistration {
         this.dateOfBirth = dateOfBirthIn.getValue();
         this.checkInDate = checkInField.getValue();
         this.checkOutDate = checkOutField.getValue();
-        this.roomType = roomTypeIn;
+        this.roomType = new SimpleIntegerProperty(roomTypeIn);
         this.guestDOB = new SimpleStringProperty(dateOfBirthIn.getValue().toString());
+        this.roomNumber = new SimpleIntegerProperty(0);
     }
 
     public void registerGuest(Connection connection) throws SQLException {
-        addToDb(connection);
-        createInvoice(connection);
-        addToStay(connection);
+        int maxAttempts = 10;
+        int attempts = 0;
 
+        while (attempts < maxAttempts) {
+            //this actually hurts my soul to look at but it works and I don't want to look at code anymore
+            String roomString = roomType.get() + "0" + getRandomRoomNumber();
+            roomNumber.set(Integer.parseInt(roomString));
+            int potentialRoomNumber = Integer.parseInt(roomString);
+        
+            if (!checkRoomAvailability(connection, potentialRoomNumber)) {
+                successfulRoomNumber = potentialRoomNumber;
+                addToDb(connection);
+                createInvoice(connection);
+                addToStay(connection);
+                break;
+                 // Return the successful room number
+            }
+            else{
+                System.out.println("Room " + potentialRoomNumber + " is occupied.");
+            }
+            attempts++;
+        }
+
+        
+            //System.out.println("No available rooms after " + maxAttempts + " attempts.");
+            // Handle the situation where no available rooms are found.
+            //return;
+    
+    }
+
+    private static int getRandomRoomNumber() {
+        Random random = new Random();
+        // Generate a random number between 0 and 9 (inclusive)
+        return random.nextInt(10);
+    }
+
+
+    public boolean checkRoomAvailability(Connection connection, int roomNumberIn) throws SQLException {
+        boolean roomStatus = false;
+        String query = "SELECT room_status_flag FROM room WHERE room_number = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, roomNumberIn);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    roomStatus = resultSet.getBoolean("room_status_flag");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception appropriately
+        }
+        return roomStatus;
     }
 
     public void addToStay(Connection connection) throws SQLException {
@@ -87,14 +137,12 @@ public class GuestRegistration {
             }
         }
 
-        //Roon assignments and states plus the 3 modifyStay options TODO
-        //extend stay, cancel stay, extend stay and check out
         //make function to choose free room (at random?) then set room as occupied (smth like this for room assignment?)
         String insertQuery = "INSERT INTO stay (stay_id, guest_id, room_number, checkin_date, checkout_date, invoice_id) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             preparedStatement.setInt(1, stayID.get());
             preparedStatement.setInt(2, guestID.get());
-            preparedStatement.setInt(3, roomNumber); //make function to choose free room (at random?) then set room as occupied
+            preparedStatement.setInt(3, successfulRoomNumber); //make function to choose free room (at random?) then set room as occupied
             preparedStatement.setDate(4, java.sql.Date.valueOf(checkInDate));
             preparedStatement.setDate(5, java.sql.Date.valueOf(checkOutDate));
             preparedStatement.setInt(6, invoiceID);
@@ -108,6 +156,7 @@ public class GuestRegistration {
 
     }
 
+    
     public void createInvoice(Connection connection) throws SQLException {
             String maxInvoiceIDQuery = "SELECT MAX(invoice_id) FROM invoice";
             try (PreparedStatement maxInvoiceIDStatement = connection.prepareStatement(maxInvoiceIDQuery);
@@ -267,6 +316,14 @@ public class GuestRegistration {
 
     public StringProperty guestDOBProperty() {
         return guestDOB;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber.get();
+    }
+
+    public IntegerProperty roomNumberProperty() {
+        return roomNumber;
     }
 
 

@@ -28,6 +28,8 @@ module hotel {
     opens hotel.UI.Staff.AdditionalServices.AdditionalServicesOptions to javafx.fxml;
     exports hotel.UI.Staff.AdditionalServices.AdditionalServicesOptions;
 
+    opens hotel.UI.Staff.checkOut to javafx.fxml;
+    exports hotel.UI.Staff.checkOut;
     
 }
 

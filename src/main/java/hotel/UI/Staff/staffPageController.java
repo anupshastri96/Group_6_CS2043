@@ -23,10 +23,20 @@ public class staffPageController {
 
     public void processExtras(ActionEvent event) throws IOException {
        WelcomePage.setRoot("Staff/AdditionalServices/additionalServicesSearch");
+        
     }
 
     public void processCheckOut(ActionEvent event) throws IOException {
-       //WelcomePage.setRoot("Staff/RoomManagement/roommanagement");
+       
+         WelcomePage.setRoot("Staff/CheckOut/checkOutSearch");
+    }
+
+    public void processListRooms(ActionEvent event) throws IOException {
+       WelcomePage.setRoot("Staff/ListRooms");
+    }
+
+    public void processListStays(ActionEvent event) throws IOException {
+       WelcomePage.setRoot("Staff/ListStays");
     }
 
     public void processExit() {

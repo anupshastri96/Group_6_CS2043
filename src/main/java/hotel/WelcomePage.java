@@ -15,7 +15,7 @@ public class WelcomePage extends Application {
     public static final DbLoader dbLoader = DbLoader.loadFromCredentialsFile(WelcomePage.class.getResource("credentials.txt").getPath());
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         try {
             scene = new Scene(loadFXML("Staff/staffpage"), 640, 480);
             primaryStage.setTitle("Hotel Management System");
@@ -24,6 +24,7 @@ public class WelcomePage extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
+            WelcomePage.setRoot("Error");
         }
     }
 

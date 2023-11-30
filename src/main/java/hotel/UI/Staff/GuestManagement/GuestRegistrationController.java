@@ -50,7 +50,7 @@ public class GuestRegistrationController {
 
     //@FXML
     //private DatePicker DateOfBirthIn;
-
+    //display the room number when registered
 
     @FXML
     private void handleSelection() {
@@ -81,7 +81,7 @@ public class GuestRegistrationController {
         }
 
     @FXML
-    private void processEnter(ActionEvent event) {
+    private void processEnter(ActionEvent event) throws IOException {
         if(guestNameIn.getText().isEmpty() || guestPhoneNumberIn.getText().isEmpty() || guestEmailIn.getText().isEmpty() || guestAddressIn.getText().isEmpty() || dateOfBirthIn.getValue() == null ||
         checkInField.getValue() == null || checkOutField.getValue() == null || roomType.getValue() == null){
             requiredText.setText("Please fill in all fields");
@@ -98,13 +98,12 @@ public class GuestRegistrationController {
                 System.out.println(roomTypeVal);
                 GuestRegistration guest = new GuestRegistration(guestNameIn, guestPhoneNumberIn, guestEmailIn, guestAddressIn, dateOfBirthIn, checkInField, checkOutField, roomTypeVal);
                 guest.registerGuest(connection);
-                requiredText.setText("Guest Registered");
+                requiredText.setText("Guest Registered. Room Number: " + guest.getRoomNumber());
                 
             } 
             catch (SQLException e) {
                 e.printStackTrace();
-                
-                // Handle the exception appropriately
+                WelcomePage.setRoot("Error");
             }
 
         }

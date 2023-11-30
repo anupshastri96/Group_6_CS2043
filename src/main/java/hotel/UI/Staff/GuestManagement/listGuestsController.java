@@ -53,10 +53,13 @@ public class listGuestsController implements Initializable {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
-    public void processGuestList() throws SQLException {
+    public void processGuestList() throws SQLException, IOException {
         guestIdColumn.setCellValueFactory(cellData -> cellData.getValue().guestIDProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().guestNameProperty());
         phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneNumProperty());
@@ -68,6 +71,7 @@ public class listGuestsController implements Initializable {
             tableView.getItems().addAll(guests);
         } catch (SQLException e) {
             e.printStackTrace();
+            WelcomePage.setRoot("Error");
         }
     }
 

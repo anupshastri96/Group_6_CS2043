@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotel.UI.Staff.listStaysController">
+    <padding>
+        <Insets top="10" right="20" bottom="20" left="20"/>
+    </padding>
+    <TableView fx:id="staysTableView">
+            <columns>
+                <TableColumn text="Stay ID" fx:id="stayIdColumn"/>
+                <TableColumn text="Guest ID" fx:id="guestIdColumn"/>
+                <TableColumn text="Guest Name" fx:id="guestNameColumn"/>
+                <TableColumn text="Room Number" fx:id="roomNumberColumn"/>
+                <TableColumn text="Check-in Date" fx:id="checkinDateColumn"/>
+                <TableColumn text="Checkout Date" fx:id="checkoutDateColumn"/>
+                <TableColumn text="Invoice ID" fx:id="invoiceIdColumn"/>
+            </columns>
+        </TableView>
+        <Button text="Exit" onAction="#processExitStaff"/>
+</VBox>

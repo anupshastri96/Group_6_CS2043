@@ -15,13 +15,18 @@ import hotel.UI.Staff.ModifyStay.modifyStaySearchController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 public class changeRoomController {
+    //@FXML
+    //private ComboBox<String> roomType;
     @FXML
-    private ComboBox<String> roomType;
+    private Text changeRoomText;
 
     @FXML
     private TextField roomNumber;
+
+
 
     public void processChangeRoomConfirmation() throws IOException{
         WelcomePage.setRoot("Staff/ModifyStay/ModifyStayOptions/ChangeRoom");
@@ -29,21 +34,46 @@ public class changeRoomController {
 
     public void processChangeRoom() throws IOException{
         try (Connection connection = DriverManager.getConnection(DbLoader.getUrl(), DbLoader.getUsername(), DbLoader.getPassword())) {
-            if (checkRooms(connection) == true){
-                System.out.println("Room is occupied");
+            if (checkRooms(connection) == true || sameRoom(connection) == true){
+                changeRoomText.setText("Room is occupied or same room");
             }
             else{
                 enterIntoDB(connection);
+                WelcomePage.setRoot("Staff/ModifyStay/modifyStay");
             }
         } 
         catch (SQLException e) {
                 e.printStackTrace();
-                
-                // Handle the exception appropriately
+                WelcomePage.setRoot("Error");
+
             }
         
-        WelcomePage.setRoot("Staff/ModifyStay/modifyStay");
+        
        
+    }
+
+    public boolean sameRoom(Connection connection) throws IOException, SQLException{
+        String name = modifyStaySearchController.getModifySearchName();
+        boolean sameRoomFlag = false;
+        String checkRoomOccupancy = "SELECT stay.room_number\r\n" + //
+                "FROM stay JOIN guest ON stay.guest_id = guest.guest_id\r\n" + //
+                "WHERE guest.name = ?;";
+
+        PreparedStatement queryStmtGet = connection.prepareStatement(checkRoomOccupancy);
+        queryStmtGet.setString(1, name);
+        try (ResultSet result = queryStmtGet.executeQuery()) {
+            if (result.next()) {
+                int dbRoomNumber = result.getInt("room_number");
+                if (dbRoomNumber == Integer.parseInt(roomNumber.getText())){
+                    sameRoomFlag = true;
+                }
+            } 
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            //WelcomePage.setRoot("Error");
+        }
+        return sameRoomFlag;
     }
 
     public boolean checkRooms(Connection connection) throws IOException, SQLException{
@@ -65,15 +95,22 @@ public class changeRoomController {
         }
         catch (SQLException e) {
             e.printStackTrace();
-            
-            // Handle the exception appropriately
+            //WelcomePage.setRoot("Error");
         }
         return roomFlag;
     }
 
     public void enterIntoDB(Connection connection) throws IOException, SQLException {
-        //update guest stay
         String name = modifyStaySearchController.getModifySearchName();
+        //update old room as free (0 means free, 1 means occupied))
+        String oldRoomUpdate = "UPDATE room\r\n" + //
+                "SET room_status_flag = 0\r\n" + //
+                "WHERE room_number IN (SELECT stay.room_number FROM stay JOIN guest ON stay.guest_id = guest.guest_id WHERE guest.name = ?);";
+        PreparedStatement updateOldRoom = connection.prepareStatement(oldRoomUpdate);
+        updateOldRoom.setString(1, name);
+        updateOldRoom.execute();
+        
+        //update guest stay
         String sql = "UPDATE stay\r\n" + //
                 "SET room_number = ?\r\n" + //
                 "FROM stay\r\n" + //
@@ -87,9 +124,8 @@ public class changeRoomController {
         queryStmt.setString(2, name);
         queryStmt.execute();
 
-        //update roomstatus
-        //SET OLD ROOM AS FREE
-        String roomUpdate = "UPDATE room SET room_status_flag = 0 WHERE room_number = ?;";
+        //update new roomstatus
+        String roomUpdate = "UPDATE room SET room_status_flag = 1 WHERE room_number = ?;";
         PreparedStatement updateRoom = connection.prepareStatement(roomUpdate);
         updateRoom.setInt(1, Integer.parseInt(roomNumber.getText()));
         updateRoom.execute();

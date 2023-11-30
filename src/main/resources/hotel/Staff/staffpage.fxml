@@ -8,6 +8,8 @@
       fx:controller="hotel.UI.Staff.staffPageController">
 
     <Button text="Guest Management" onAction="#processGuestManagement"/>
+    <Button text="List Rooms" onAction="#processListRooms"/>
+    <Button text="List Stays" onAction="#processListStays"/>
     <Button text="Modify Stay" onAction="#processModifyStay"/>
     <Button text="Additional Services" onAction="#processExtras"/>
     <Button text="Check Out" onAction="#processCheckOut"/>
